@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace TFlat.Compiler.Lexer;
+namespace TungstenCompiler.Lexer;
 
 internal static class TheLexer
 {
@@ -160,7 +160,7 @@ internal static class TheLexer
     {
         var sb = new StringBuilder();
 
-        for(var i = position; i < s.Length; i++)
+        for (var i = position; i < s.Length; i++)
         {
             if (!char.IsDigit(s[i])) break;
 

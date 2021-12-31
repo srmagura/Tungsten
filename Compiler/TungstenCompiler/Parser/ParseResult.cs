@@ -1,4 +1,4 @@
-namespace TFlat.Compiler.Parser;
+namespace TungstenCompiler.Parser;
 
 internal record ParseResult<T>
     where T : ParseNode

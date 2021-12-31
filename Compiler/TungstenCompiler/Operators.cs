@@ -1,4 +1,4 @@
-namespace TFlat.Shared;
+namespace TungstenCompiler;
 
 public enum UnaryOperator
 {

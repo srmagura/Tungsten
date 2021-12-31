@@ -1,7 +1,7 @@
-using TFlat.Compiler.Lexer;
-using TFlat.Compiler.Parser.Expression;
+using TungstenCompiler.Lexer;
+using TungstenCompiler.Parser.Expression;
 
-namespace TFlat.Compiler.Parser.Module;
+namespace TungstenCompiler.Parser.Module;
 
 internal static class StatementParser
 {

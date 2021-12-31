@@ -1,6 +1,8 @@
-using TFlat.Compiler.Lexer;
+using TungstenCompiler;
+using TungstenCompiler.Lexer;
+using TungstenCompiler.Parser;
 
-namespace TFlat.Compiler.Parser.Expression;
+namespace TungstenCompiler.Parser.Expression;
 
 internal static class BinaryOperationParser
 {
@@ -44,7 +46,7 @@ internal static class BinaryOperationParser
     private static ParseResult<PostBinaryOperationParseNode>? ParsePostBinaryOperationCore(
         Dictionary<TokenType, BinaryOperator> tokenToOperatorMap,
         Func<Token[], int, ParseResult<ParseNode>?> parseOperand,
-        Token[] tokens, 
+        Token[] tokens,
         int position
     )
     {

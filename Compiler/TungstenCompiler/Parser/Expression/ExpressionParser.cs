@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TFlat.Compiler.Lexer;
+using TungstenCompiler.Lexer;
 
-namespace TFlat.Compiler.Parser.Expression;
+namespace TungstenCompiler.Parser.Expression;
 
 internal static class ExpressionParser
 {

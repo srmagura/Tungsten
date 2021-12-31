@@ -1,4 +1,4 @@
-using TFlat.Compiler.Lexer;
+using TungstenCompiler.Lexer;
 
 namespace CompilerTests.Lexer;
 
@@ -173,7 +173,13 @@ public class LexerTests
     [TestMethod]
     public void HelloWorld()
     {
-        var simpleTokens = TheLexer.Lex(CodeFixtures.HelloWorld)
+        var code = @"
+fun main(): void {
+    print(""hello world"");
+}
+        ";
+
+        var simpleTokens = TheLexer.Lex(code)
             .Select(ToSimpleToken)
             .ToList();
 

@@ -1,6 +1,6 @@
-using TFlat.Compiler.Parser;
+using TungstenCompiler.Parser;
 
-namespace TFlat.Compiler.AST;
+namespace TungstenCompiler.AST;
 
 internal static class ExpressionToAst
 {

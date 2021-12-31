@@ -1,13 +1,14 @@
-using TFlat.Compiler.Lexer;
+using TungstenCompiler;
+using TungstenCompiler.Lexer;
 
-namespace TFlat.Compiler.Parser.Expression;
+namespace TungstenCompiler.Parser.Expression;
 
 internal static class UnaryOperationParser
 {
     internal static ParseResult<ParseNode>? Parse(Token[] tokens, int position)
     {
         var unaryOperation = ParseUnaryOperation(tokens, position);
-        if(unaryOperation != null)
+        if (unaryOperation != null)
             return ParseResultUtil.Generic(unaryOperation);
 
         return ExponentiationParser.Parse(tokens, position);
@@ -28,7 +29,7 @@ internal static class UnaryOperationParser
         if (unaryOperator == null) return null;
         i++;
 
-        var expressionResult = ParenthesizedExpressionParser.Parse(tokens, i); 
+        var expressionResult = ParenthesizedExpressionParser.Parse(tokens, i);
         if (expressionResult == null) return null;
         i += expressionResult.ConsumedTokens;
 

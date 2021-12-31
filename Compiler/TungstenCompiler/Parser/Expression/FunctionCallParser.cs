@@ -1,6 +1,7 @@
-using TFlat.Compiler.Lexer;
+using TungstenCompiler.Lexer;
+using TungstenCompiler.Parser;
 
-namespace TFlat.Compiler.Parser.Expression;
+namespace TungstenCompiler.Parser.Expression;
 
 internal static class FunctionCallParser
 {

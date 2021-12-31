@@ -1,4 +1,4 @@
-namespace TFlat.Compiler.Lexer;
+namespace TungstenCompiler.Lexer;
 
 internal enum TokenType
 {

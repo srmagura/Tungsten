@@ -1,6 +1,4 @@
-using TFlat.Compiler.AST;
-using TFlat.Compiler.Lexer;
-using TFlat.Compiler.Parser.Expression;
+using TungstenCompiler.Parser.Expression;
 
 namespace CompilerTests.Parser.Expression;
 

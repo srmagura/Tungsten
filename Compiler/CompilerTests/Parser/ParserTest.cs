@@ -1,5 +1,5 @@
-using TFlat.Compiler.Lexer;
-using TFlat.Compiler.Parser;
+using TungstenCompiler.Lexer;
+using TungstenCompiler.Parser;
 
 namespace CompilerTests.Parser;
 

@@ -1,7 +1,5 @@
-using TFlat.Compiler.AST;
-using TFlat.Compiler.Lexer;
-using TFlat.Compiler.Parser;
-using TFlat.Compiler.Parser.Module;
+using TungstenCompiler.Parser;
+using TungstenCompiler.Parser.Module;
 
 namespace CompilerTests.Parser;
 
@@ -32,14 +30,20 @@ public class ModuleParserTests : ParserTest
     [TestMethod]
     public void HelloWorld()
     {
+        var code = @"
+fun main(): void {
+    print(""hello world"");
+}
+        ";
+
         var main = new FunctionDeclarationAstNode(
-            "main",
-            Exported: false,
-            new[]
-            {
+                "main",
+                Exported: false,
+                new[]
+                {
                 Print(new StringAstNode("hello world"))
-            }
-        );
+                }
+            );
 
         var expected = new ModuleAstNode(
             new[]
@@ -48,12 +52,23 @@ public class ModuleParserTests : ParserTest
             }
         );
 
-        TestParse(CodeFixtures.HelloWorld, expected);
+        TestParse(code, expected);
     }
 
     [TestMethod]
     public void MultipleFunctions()
     {
+        var code = @"
+fun print3(): void {
+    print(3);
+}
+
+fun main(): void {
+    print3();
+    print("".14159"");
+}
+        ";
+
         var print3 = new FunctionDeclarationAstNode(
             "print3",
             Exported: false,
@@ -86,12 +101,19 @@ public class ModuleParserTests : ParserTest
             }
         );
 
-        TestParse(CodeFixtures.MultipleFunctions, expected);
+        TestParse(code, expected);
     }
 
     [TestMethod]
     public void ConstVariable()
     {
+        var code = @"
+fun main(): void {
+    const a: string = ""apple"";
+    print(a);
+}
+        ";
+
         var main = new FunctionDeclarationAstNode(
             "main",
             Exported: false,
@@ -113,12 +135,22 @@ public class ModuleParserTests : ParserTest
             }
         );
 
-        TestParse(CodeFixtures.ConstVariable, expected);
+        TestParse(code, expected);
     }
 
     [TestMethod]
     public void LetVariable()
     {
+        var code = @"
+fun main(): void {
+    let my_variable: int = 7;
+    print(my_variable);
+
+    my_variable = 3;
+    print(my_variable);
+}
+        ";
+
         var main = new FunctionDeclarationAstNode(
             "main",
             Exported: false,
@@ -145,6 +177,6 @@ public class ModuleParserTests : ParserTest
             }
         );
 
-        TestParse(CodeFixtures.LetVariable, expected);
+        TestParse(code, expected);
     }
 }

@@ -1,4 +1,6 @@
-namespace TFlat.Compiler.Parser;
+using TungstenCompiler;
+
+namespace TungstenCompiler.Parser;
 
 internal abstract record ParseNode();
 
@@ -13,7 +15,7 @@ internal record BoolLiteralParseNode(bool Value)
 internal record IntLiteralParseNode(int Value)
     : ParseNode();
 
-internal record StringLiteralParseNode(string Value) 
+internal record StringLiteralParseNode(string Value)
     : ParseNode();
 
 internal record IdentifierExpressionParseNode(string Identifier)

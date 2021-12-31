@@ -1,6 +1,6 @@
-using TFlat.Compiler.Lexer;
+using TungstenCompiler.Lexer;
 
-namespace TFlat.Compiler.Parser.Module;
+namespace TungstenCompiler.Parser.Module;
 
 internal class ModuleParser
 {

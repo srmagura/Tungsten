@@ -1,6 +1,7 @@
-using TFlat.Compiler.Lexer;
+using TungstenCompiler;
+using TungstenCompiler.Lexer;
 
-namespace TFlat.Compiler.Parser.Expression;
+namespace TungstenCompiler.Parser.Expression;
 
 internal static class MultiplicationParser
 {

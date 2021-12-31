@@ -1,6 +1,6 @@
-using TFlat.Compiler.Parser;
+using TungstenCompiler.Parser;
 
-namespace TFlat.Compiler.AST;
+namespace TungstenCompiler.AST;
 
 internal static class StatementToAst
 {
@@ -8,7 +8,7 @@ internal static class StatementToAst
     {
         return parseNode switch
         {
-            VariableDeclarationAndAssignmentStatementParseNode variableDeclarationAndAssignment => 
+            VariableDeclarationAndAssignmentStatementParseNode variableDeclarationAndAssignment =>
                 ConvertVariableDeclarationAndAssignmentStatement(variableDeclarationAndAssignment),
             VariableDeclarationStatementParseNode variableDeclaration =>
                 ConvertVariableDeclarationStatement(variableDeclaration),
@@ -27,7 +27,7 @@ internal static class StatementToAst
         );
     }
 
-    private static VariableDeclarationAndAssignmentStatementAstNode 
+    private static VariableDeclarationAndAssignmentStatementAstNode
         ConvertVariableDeclarationAndAssignmentStatement(VariableDeclarationAndAssignmentStatementParseNode parseNode)
     {
         return new VariableDeclarationAndAssignmentStatementAstNode(

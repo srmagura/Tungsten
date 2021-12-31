@@ -1,10 +1,10 @@
 using CommandLine;
 using System.Text;
-using TFlat.Compiler.AST;
-using TFlat.Compiler.Lexer;
-using TFlat.Compiler.Parser.Module;
+using TungstenCompiler.AST;
+using TungstenCompiler.Lexer;
+using TungstenCompiler.Parser.Module;
 
-namespace TFlat.Compiler;
+namespace TungstenCompiler;
 
 public static class CompilerProgram
 {
@@ -19,8 +19,6 @@ public static class CompilerProgram
         var tokens = TheLexer.Lex(code);
         var parseTree = ModuleParser.Parse(tokens);
         var ast = ModuleToAst.Convert(parseTree);
-        
-        await AstSerializer.SerializeAsync(ast, dllStream);
     }
 
     private static async Task RunAsync(Options options)
