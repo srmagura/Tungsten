@@ -10,6 +10,9 @@ internal class ModuleParser
         if (parseResult == null)
             throw new Exception("Failed to parse module.");
 
+        if (parseResult.ConsumedTokens != tokens.Length)
+            throw new Exception("ModuleParser did not consume all tokens.");
+
         return parseResult.Node;
     }
 

@@ -5,20 +5,17 @@ namespace TungstenCompiler.Emit;
 
 internal static class AssemblyEmitter
 {
-    internal static void Emit(ModuleAstNode ast)
+    internal static AssemblyDefinition Emit(ModuleAstNode ast)
     {
-        var assemblyNameString = "ConsoleApp";
+        var assemblyNameString = "TungstenApp";
         var assemblyName = new AssemblyNameDefinition(assemblyNameString, new Version(1, 0, 0));
         var assembly = AssemblyDefinition.CreateAssembly(assemblyName, "Program", ModuleKind.Console);
-        var mainModule = assembly.MainModule;
+        
+        var (moduleType, entryPoint) = ModuleEmitter.Emit(ast, assembly.MainModule, assemblyNameString);
 
-        var programClass = new TypeDefinition(
-            assemblyNameString, 
-            "Program", 
-            TypeAttributes.Class | TypeAttributes.NotPublic
-        );
+        assembly.MainModule.Types.Add(moduleType);
+        assembly.MainModule.EntryPoint = entryPoint;
 
-        mainModule.Types.Add(programClass);
-        mainModule.EntryPoint = null;
+        return assembly;
     }
 }
