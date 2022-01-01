@@ -18,4 +18,8 @@
     <ProjectReference Include="..\Tungsten.Compiler\Tungsten.Compiler.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Emit\" />
+  </ItemGroup>
+
 </Project>

@@ -32,6 +32,9 @@ It's not based on JavaScript.
 
 ## Examples
 
+**For complete projects that you can build and run,** see the 
+[TungstenExamples repository](https://github.com/srmagura/TungstenExamples).
+
 Many of the type annotations in these examples are optional. These use Rust
 syntax highlighting which won't be 100% accurate.
 

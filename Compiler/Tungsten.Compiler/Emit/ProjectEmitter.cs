@@ -4,13 +4,13 @@ using Tungsten.Compiler.AST;
 
 namespace Tungsten.Compiler.Emit;
 
-internal static class ProgramEmitter
+internal static class ProjectEmitter
 {
-    internal static void Emit(ModuleAstNode ast, string outputDirectory)
+    internal static void Emit(AssemblyAstNode ast, string outputDirectory)
     {
         var assembly = AssemblyEmitter.Emit(ast);
 
-        var dllPath = Path.Combine(outputDirectory, "TungstenApp.dll");
+        var dllPath = Path.Combine(outputDirectory, $"{ast.Name}.dll");
         assembly.Write(dllPath, new WriterParameters());
 
         var runtimeOptions = new
@@ -27,7 +27,7 @@ internal static class ProgramEmitter
         };
 
         var runtimeOptionsJson = JsonSerializer.Serialize(runtimeOptions);
-        var runtimeOptionsPath = Path.Combine(outputDirectory, "TungstenApp.runtimeconfig.json");
+        var runtimeOptionsPath = Path.Combine(outputDirectory, $"{ast.Name}.runtimeconfig.json");
         File.WriteAllText(runtimeOptionsPath, runtimeOptionsJson);
     }
 }
