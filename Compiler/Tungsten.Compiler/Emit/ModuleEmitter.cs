@@ -8,35 +8,48 @@ internal static class ModuleEmitter
 {
     internal static (TypeDefinition Class, MethodDefinition? EntryPoint) Emit(
         ModuleAstNode ast,
-        ModuleDefinition moduleDefinition,
+        ModuleDefinition module,
         string rootNamespace
     )
     {
-        var baseType = moduleDefinition.ImportReference(typeof(Object));
-
-        var programClass = new TypeDefinition(
+        var @class = new TypeDefinition(
             rootNamespace,
-            "Program",
+            ast.Name,
             TypeAttributes.Class | TypeAttributes.Public | TypeAttributes.Abstract | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
-            baseType
+            module.ImportReference(typeof(Object))
         );
 
-        var @void = moduleDefinition.ImportReference(typeof(void));
-        var mainTA = MethodAttributes.Static | MethodAttributes.Assembly | MethodAttributes.HideBySig;
-        var mainMethod = new MethodDefinition("main", mainTA, @void);
+        MethodDefinition? mainMethod = null;
 
-        var il = mainMethod.Body.GetILProcessor();
-        il.Emit(OpCodes.Ldstr, "hello world");
+        foreach (var functionDeclaration in ast.FunctionDeclarations)
+        {
+            var method = Emit(functionDeclaration, module);
+            @class.Methods.Add(method);
 
-        var writeLineRef = moduleDefinition.ImportReference(
-            typeof(Console).GetMethod(nameof(Console.WriteLine), new[] { typeof(string) })
+            if (functionDeclaration.IsMain)
+                mainMethod = method;
+        }
+
+        return (@class, mainMethod);
+    }
+
+    private static MethodDefinition Emit(FunctionDeclarationAstNode ast, ModuleDefinition module)
+    {
+        var method = new MethodDefinition(
+            ast.Name,
+            MethodAttributes.Static | MethodAttributes.Assembly | MethodAttributes.HideBySig,
+            module.ImportReference(typeof(void))
         );
-        il.Emit(OpCodes.Call, writeLineRef);
+
+        var il = method.Body.GetILProcessor();
+
+        foreach (var statement in ast.Statements)
+        {
+            StatementEmitter.Emit(statement, module, il);
+        }
 
         il.Emit(OpCodes.Ret);
 
-        programClass.Methods.Add(mainMethod);
-
-        return (programClass, mainMethod);
+        return method;
     }
 }

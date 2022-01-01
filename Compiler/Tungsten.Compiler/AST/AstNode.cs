@@ -43,12 +43,12 @@ public record FunctionCallStatementAstNode(FunctionCallAstNode FunctionCall)
 
 // Module-level
 
-public record FunctionDeclarationAstNode(string Name, bool Exported, AstNode[] Statements)
+public record FunctionDeclarationAstNode(string Name, bool IsMain, AstNode[] Statements)
     : AstNode();
 
 // Top-level
 
-public record ModuleAstNode(FunctionDeclarationAstNode[] FunctionDeclarations)
+public record ModuleAstNode(string Name, FunctionDeclarationAstNode[] FunctionDeclarations)
     : AstNode();
 
 public record AssemblyAstNode(string Name, ModuleAstNode Module)

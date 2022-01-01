@@ -7,10 +7,12 @@ namespace Tungsten.Compiler.Tests.Parser;
 [TestClass]
 public class ModuleParserTests : ParserTest
 {
+    private const string ModuleName = "TestModule";
+
     private static AstNode ConvertToAst(ParseNode parseNode)
     {
         Assert.IsInstanceOfType(parseNode, typeof(ModuleParseNode));
-        return ModuleToAst.Convert((ModuleParseNode)parseNode);
+        return ModuleToAst.Convert((ModuleParseNode)parseNode, ModuleName);
     }
 
     private static void TestParse(string code, AstNode expected)
@@ -39,7 +41,7 @@ fun main(): void {
 
         var main = new FunctionDeclarationAstNode(
                 "main",
-                Exported: false,
+                IsMain: false,
                 new[]
                 {
                 Print(new StringAstNode("hello world"))
@@ -47,6 +49,7 @@ fun main(): void {
             );
 
         var expected = new ModuleAstNode(
+            ModuleName,
             new[]
             {
                 main
@@ -72,7 +75,7 @@ fun main(): void {
 
         var print3 = new FunctionDeclarationAstNode(
             "print3",
-            Exported: false,
+            IsMain: false,
             Statements: new[]
             {
                 Print(new IntAstNode(3))
@@ -81,7 +84,7 @@ fun main(): void {
 
         var main = new FunctionDeclarationAstNode(
             "main",
-            Exported: false,
+            IsMain: false,
             Statements: new[]
             {
                 new FunctionCallStatementAstNode(
@@ -95,6 +98,7 @@ fun main(): void {
         );
 
         var expected = new ModuleAstNode(
+            ModuleName,
             new[]
             {
                 print3,
@@ -117,7 +121,7 @@ fun main(): void {
 
         var main = new FunctionDeclarationAstNode(
             "main",
-            Exported: false,
+            IsMain: false,
             Statements: new AstNode[]
             {
                 new VariableDeclarationAndAssignmentStatementAstNode(
@@ -130,6 +134,7 @@ fun main(): void {
         );
 
         var expected = new ModuleAstNode(
+            ModuleName,
             new[]
             {
                 main
@@ -154,7 +159,7 @@ fun main(): void {
 
         var main = new FunctionDeclarationAstNode(
             "main",
-            Exported: false,
+            IsMain: false,
             Statements: new AstNode[]
             {
                 new VariableDeclarationAndAssignmentStatementAstNode(
@@ -172,6 +177,7 @@ fun main(): void {
         );
 
         var expected = new ModuleAstNode(
+            ModuleName,
             new[]
             {
                 main

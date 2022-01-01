@@ -19,13 +19,20 @@ public class E2eTest
 
         var processStartInfo = new ProcessStartInfo("dotnet", dllPath)
         {
-            RedirectStandardOutput = true
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
         };
 
         using var process = Process.Start(processStartInfo);
         Assert.IsNotNull(process);
 
         await process.WaitForExitAsync();
+        
+        var errorOutput = await process.StandardError.ReadToEndAsync();
+        if(!string.IsNullOrWhiteSpace(errorOutput))
+            Console.WriteLine(errorOutput);
+
+        Assert.AreEqual(0, process.ExitCode);
 
         var output = await process.StandardOutput.ReadToEndAsync();
         output = output.ReplaceLineEndings("\n");

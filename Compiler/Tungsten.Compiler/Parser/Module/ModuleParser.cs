@@ -79,7 +79,7 @@ internal class ModuleParser
                 i++;
 
                 return new ParseResult<FunctionDeclarationParseNode>(
-                    new FunctionDeclarationParseNode(name, exported, statements.ToArray()),
+                    new FunctionDeclarationParseNode(name, statements.ToArray()),
                     consumedTokens: i - position
                 );
             }

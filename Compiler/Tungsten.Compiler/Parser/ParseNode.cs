@@ -82,7 +82,7 @@ internal record AssignmentStatementParseNode(string Identifier, ParseNode Value)
 
 // Top-level
 
-internal record FunctionDeclarationParseNode(string Name, bool Exported, ParseNode[] Statements)
+internal record FunctionDeclarationParseNode(string Name, ParseNode[] Statements)
     : ParseNode();
 
 internal record ModuleParseNode(FunctionDeclarationParseNode[] FunctionDeclarations)

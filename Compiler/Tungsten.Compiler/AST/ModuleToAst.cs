@@ -4,13 +4,13 @@ namespace Tungsten.Compiler.AST;
 
 internal static class ModuleToAst
 {
-    internal static ModuleAstNode Convert(ModuleParseNode parseNode)
+    internal static ModuleAstNode Convert(ModuleParseNode parseNode, string name)
     {
         var functionDeclarations = parseNode.FunctionDeclarations
             .Select(ConvertFunctionDeclaration)
             .ToArray();
 
-        return new ModuleAstNode(functionDeclarations);
+        return new ModuleAstNode(name, functionDeclarations);
     }
 
     private static FunctionDeclarationAstNode ConvertFunctionDeclaration(FunctionDeclarationParseNode parseNode)
@@ -19,6 +19,9 @@ internal static class ModuleToAst
             .Select(StatementToAst.Convert)
             .ToArray();
 
-        return new FunctionDeclarationAstNode(parseNode.Name, parseNode.Exported, statements);
+        // TODO check function arguments and return type
+        var isMain = parseNode.Name == "main";
+
+        return new FunctionDeclarationAstNode(parseNode.Name, isMain, statements);
     }
 }
