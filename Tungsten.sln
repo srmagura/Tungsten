@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tungsten.Compiler.Tests", "Compiler\Tungsten.Compiler.Tests\Tungsten.Compiler.Tests.csproj", "{1E0C17C7-8A9D-4F44-A9D5-455263319888}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tungsten.Compiler", "Compiler\Tungsten.Compiler\Tungsten.Compiler.csproj", "{FAD09012-77F9-407A-B9B7-26C9EE9C7C1C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution Items", "_Solution Items", "{DF7B710F-0A73-45DD-9E38-0AD253634C76}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1E0C17C7-8A9D-4F44-A9D5-455263319888}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E0C17C7-8A9D-4F44-A9D5-455263319888}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E0C17C7-8A9D-4F44-A9D5-455263319888}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E0C17C7-8A9D-4F44-A9D5-455263319888}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAD09012-77F9-407A-B9B7-26C9EE9C7C1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAD09012-77F9-407A-B9B7-26C9EE9C7C1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAD09012-77F9-407A-B9B7-26C9EE9C7C1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAD09012-77F9-407A-B9B7-26C9EE9C7C1C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2359CD23-1B85-49CD-9842-9968798B94F7}
+	EndGlobalSection
+EndGlobal

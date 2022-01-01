@@ -6,7 +6,7 @@
 
 > 🚧 Work in progress 🚧
 
-An general purpose programming language that supports both functional and
+A general purpose programming language that supports both functional and
 object-oriented styles. Tungsten aims to bring together the best parts of C# and
 TypeScript.
 
