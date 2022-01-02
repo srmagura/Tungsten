@@ -1,10 +1,18 @@
 namespace Tungsten.Compiler.Emit;
 
-internal record Variable(string Identifier, string Type);
+internal record Variable(string Identifier, string Type, ushort Index);
 
 internal class Scope
 {
-    internal readonly Dictionary<string, Variable> Variables = new();
+    private readonly Dictionary<string, Variable> Variables = new();
+
+    private ushort Index = 0;
+
+    internal ushort Define(string identifier, string type)
+    {
+        Variables[identifier] = new Variable(identifier, type, Index);
+        return Index++;
+    }
 
     internal Variable GetOrThrow(string identifier)
     {

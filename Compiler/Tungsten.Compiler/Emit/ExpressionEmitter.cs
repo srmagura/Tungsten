@@ -21,6 +21,12 @@ internal static class ExpressionEmitter
                     il.Emit(OpCodes.Ldc_I8, @int.Value);
                     break;
                 }
+            case VariableReferenceAstNode variableReference:
+                {
+                    var variable = context.Scope.GetOrThrow(variableReference.Identifier);
+                    il.Emit(OpCodes.Ldloc, variable.Index);
+                    break;
+                }
             default:
                 throw new Exception($"Expression type not supported: {ast.GetType().Name}.");
         }

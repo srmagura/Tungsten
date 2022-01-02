@@ -57,6 +57,20 @@ internal static class StatementEmitter
         };
     }
 
+    private static Type GetExpressionType(AstNode ast, FunctionContext context)
+    {
+        var typeString = ast switch
+        {
+            StringAstNode => "string",
+            IntAstNode => "int",
+            VariableReferenceAstNode variableReference =>
+                context.Scope.GetOrThrow(variableReference.Identifier).Type,
+            _ => throw new Exception($"Unsupported: {ast.GetType().Name}.")
+        };
+
+        return GetTypeFromString(typeString, context.ModuleContext.AssemblyContext.Module);
+    }
+
     private static void EmitPrint(AstNode[] arguments, FunctionContext context)
     {
         if (arguments.Length != 1)
@@ -66,44 +80,14 @@ internal static class StatementEmitter
         var module = context.ModuleContext.AssemblyContext.Module;
         var il = context.IL;
 
-        switch (argument)
-        {
-            case StringAstNode stringArgument:
-                {
-                    il.Emit(OpCodes.Ldstr, stringArgument.Value);
+        ExpressionEmitter.Emit(argument, context);
 
-                    var writeLine = module.ImportReference(
-                        typeof(Console).GetMethod(nameof(Console.WriteLine), new[] { typeof(string) })
-                    );
-                    il.Emit(OpCodes.Call, writeLine);
-                    break;
-                }
-            case IntAstNode intArgument:
-                {
-                    il.Emit(OpCodes.Ldc_I8, intArgument.Value);
+        var argumentType = GetExpressionType(argument, context);
 
-                    var writeLine = module.ImportReference(
-                        typeof(Console).GetMethod(nameof(Console.WriteLine), new[] { typeof(long) })
-                    );
-                    il.Emit(OpCodes.Call, writeLine);
-                    break;
-                }
-            case VariableReferenceAstNode variableArgument:
-                {
-                    il.Emit(OpCodes.Ldloc_0);
-
-                    var variable = context.Scope.GetOrThrow(variableArgument.Identifier);
-                    var variableType = GetTypeFromString(variable.Type, context.ModuleContext.AssemblyContext.Module);
-
-                    var writeLine = module.ImportReference(
-                        typeof(Console).GetMethod(nameof(Console.WriteLine), new[] { variableType })
-                    );
-                    il.Emit(OpCodes.Call, writeLine);
-                    break;
-                }
-            default:
-                throw new Exception($"Unsupported print argument: {argument.GetType().Name}.");
-        }
+        var writeLine = module.ImportReference(
+            typeof(Console).GetMethod(nameof(Console.WriteLine), new[] { argumentType })
+        );
+        il.Emit(OpCodes.Call, writeLine);
     }
 
     private static void Emit(
@@ -111,17 +95,16 @@ internal static class StatementEmitter
         FunctionContext context
     )
     {
+        ExpressionEmitter.Emit(ast.Value, context);
+
         var module = context.ModuleContext.AssemblyContext.Module;
         var variableType = GetTypeFromString(ast.Type, module);
         var variableTypeReference = module.ImportReference(variableType);
 
         context.IL.Body.Variables.Add(new VariableDefinition(variableTypeReference));
-        context.Scope.Variables[ast.Identifier] = new Variable(ast.Identifier, ast.Type);
+        var variableIndex = context.Scope.Define(ast.Identifier, ast.Type);
 
-        ExpressionEmitter.Emit(ast.Value, context);
-
-        // TODO 0 is hardcoded
-        context.IL.Emit(OpCodes.Stloc_0);
+        context.IL.Emit(OpCodes.Stloc, variableIndex);
     }
 
     private static void Emit(
@@ -129,11 +112,9 @@ internal static class StatementEmitter
         FunctionContext context
     )
     {
-        var variable = context.Scope.GetOrThrow(ast.Identifier);
-
         ExpressionEmitter.Emit(ast.Value, context);
 
-        // TODO 0 is hardcoded
-        context.IL.Emit(OpCodes.Stloc_0);
+        var variable = context.Scope.GetOrThrow(ast.Identifier);
+        context.IL.Emit(OpCodes.Stloc, variable.Index);
     }
 }
