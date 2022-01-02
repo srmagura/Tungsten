@@ -7,7 +7,7 @@ public abstract record AstNode();
 public record BoolAstNode(bool Value)
     : AstNode();
 
-public record IntAstNode(int Value)
+public record IntAstNode(long Value)
     : AstNode();
 
 public record StringAstNode(string Value)

@@ -41,7 +41,7 @@ fun main(): void {
 
         var main = new FunctionDeclarationAstNode(
                 "main",
-                IsMain: false,
+                IsMain: true,
                 new[]
                 {
                 Print(new StringAstNode("hello world"))
@@ -84,7 +84,7 @@ fun main(): void {
 
         var main = new FunctionDeclarationAstNode(
             "main",
-            IsMain: false,
+            IsMain: true,
             Statements: new[]
             {
                 new FunctionCallStatementAstNode(
@@ -121,7 +121,7 @@ fun main(): void {
 
         var main = new FunctionDeclarationAstNode(
             "main",
-            IsMain: false,
+            IsMain: true,
             Statements: new AstNode[]
             {
                 new VariableDeclarationAndAssignmentStatementAstNode(
@@ -159,7 +159,7 @@ fun main(): void {
 
         var main = new FunctionDeclarationAstNode(
             "main",
-            IsMain: false,
+            IsMain: true,
             Statements: new AstNode[]
             {
                 new VariableDeclarationAndAssignmentStatementAstNode(

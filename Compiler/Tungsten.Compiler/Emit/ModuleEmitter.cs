@@ -23,7 +23,7 @@ internal static class ModuleEmitter
 
         foreach (var functionDeclaration in ast.FunctionDeclarations)
         {
-            var method = Emit(functionDeclaration, module);
+            var method = Emit(functionDeclaration, module, @class);
             @class.Methods.Add(method);
 
             if (functionDeclaration.IsMain)
@@ -33,7 +33,7 @@ internal static class ModuleEmitter
         return (@class, mainMethod);
     }
 
-    private static MethodDefinition Emit(FunctionDeclarationAstNode ast, ModuleDefinition module)
+    private static MethodDefinition Emit(FunctionDeclarationAstNode ast, ModuleDefinition module, TypeDefinition @class)
     {
         var method = new MethodDefinition(
             ast.Name,
@@ -45,7 +45,7 @@ internal static class ModuleEmitter
 
         foreach (var statement in ast.Statements)
         {
-            StatementEmitter.Emit(statement, module, il);
+            StatementEmitter.Emit(statement, module, @class, il);
         }
 
         il.Emit(OpCodes.Ret);
