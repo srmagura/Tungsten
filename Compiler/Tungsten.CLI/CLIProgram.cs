@@ -38,6 +38,14 @@ internal static class CLIProgram
         return 0;
     }
 
+    [Verb("clean")]
+    internal class CleanOptions { }
+
+    private static int Clean(CleanOptions options)
+    {
+        throw new NotImplementedException();
+    }
+
     private static int HandleParseArgumentsErrors(IEnumerable<Error> errors)
     {
         Console.Error.WriteLine("Argument parsing failed.");
@@ -46,9 +54,10 @@ internal static class CLIProgram
 
     internal static int Main(string[] args)
     {
-        return Parser.Default.ParseArguments<BuildOptions>(args)
-             .MapResult(
+        return Parser.Default.ParseArguments<BuildOptions, CleanOptions>(args)
+             .MapResult<BuildOptions, CleanOptions, int>(
                  Build,
+                 Clean,
                  HandleParseArgumentsErrors
              );
     }
