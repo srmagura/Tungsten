@@ -13,6 +13,9 @@ internal static class StatementEmitter
             case FunctionCallStatementAstNode functionCall:
                 Emit(functionCall, module, @class, il);
                 break;
+            case VariableDeclarationAndAssignmentStatementAstNode variableDeclarationAndAssignment:
+                Emit(variableDeclarationAndAssignment, module, @class, il);
+                break;
             default:
                 throw new Exception($"Unsupported statement: {ast.GetType().Name}.");
         }
@@ -75,8 +78,35 @@ internal static class StatementEmitter
                     il.Emit(OpCodes.Call, writeLine);
                     break;
                 }
+            case VariableReferenceAstNode variableArgument:
+                {
+                    il.Emit(OpCodes.Ldloc_0);
+
+                    var writeLine = module.ImportReference(
+                        typeof(Console).GetMethod(nameof(Console.WriteLine), new[] { typeof(string) })
+                    );
+                    il.Emit(OpCodes.Call, writeLine);
+                    break;
+                }
             default:
                 throw new Exception($"Unsupported print argument: {argument.GetType().Name}.");
         }
+    }
+
+    private static void Emit(
+        VariableDeclarationAndAssignmentStatementAstNode ast,
+        ModuleDefinition module,
+        TypeDefinition @class,
+        ILProcessor il
+    )
+    {
+        if (ast.Value is not StringAstNode stringAstNode)
+            throw new Exception("Only string is supported right now.");
+
+        var @string = module.ImportReference(typeof(string));
+        il.Body.Variables.Add(new VariableDefinition(@string));
+
+        il.Emit(OpCodes.Ldstr, stringAstNode.Value);
+        il.Emit(OpCodes.Stloc_0);
     }
 }

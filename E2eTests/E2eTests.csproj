@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="ConstVariable\ConstVariable.wproj" />
     <None Include="HelloWorld\HelloWorld.wproj" />
     <None Include="MultipleFunctions\MultipleFunctions.wproj" />
   </ItemGroup>
