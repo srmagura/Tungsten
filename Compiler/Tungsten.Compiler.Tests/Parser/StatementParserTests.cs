@@ -69,6 +69,7 @@ public class StatementParserTests : ParserTest
     {
         var expected = new VariableDeclarationAndAssignmentStatementAstNode(
             "a",
+            Type: "string",
             Const: true,
             new StringAstNode("apple")
         );
@@ -81,6 +82,7 @@ public class StatementParserTests : ParserTest
     {
         var expected = new VariableDeclarationAndAssignmentStatementAstNode(
             "my_variable",
+            Type: "int",
             Const: false,
             new IntAstNode(7)
         );

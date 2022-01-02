@@ -10,11 +10,9 @@ internal static class AssemblyEmitter
         var assemblyName = new AssemblyNameDefinition(ast.Name, new Version(1, 0, 0));
         var assembly = AssemblyDefinition.CreateAssembly(assemblyName, "Main", ModuleKind.Dll);
 
-        var (moduleType, entryPoint) = ModuleEmitter.Emit(
-            ast: ast.Module, 
-            module: assembly.MainModule, 
-            rootNamespace: ast.Name
-        );
+        var assemblyContext = new AssemblyContext(assembly.MainModule, RootNamespace: ast.Name);
+
+        var (moduleType, entryPoint) = ModuleEmitter.Emit(ast.Module, assemblyContext);
 
         assembly.MainModule.Types.Add(moduleType);
         assembly.MainModule.EntryPoint = entryPoint;

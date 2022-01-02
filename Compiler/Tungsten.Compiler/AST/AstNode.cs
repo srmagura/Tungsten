@@ -32,7 +32,7 @@ public record BinaryOperationAstNode(BinaryOperator Operator, AstNode Operand0, 
 public record VariableDeclarationStatementAstNode(string Identifier)
     : AstNode();
 
-public record VariableDeclarationAndAssignmentStatementAstNode(string Identifier, bool Const, AstNode Value)
+public record VariableDeclarationAndAssignmentStatementAstNode(string Identifier, string Type, bool Const, AstNode Value)
     : AstNode();
 
 public record AssignmentStatementAstNode(string Identifier, AstNode Value)

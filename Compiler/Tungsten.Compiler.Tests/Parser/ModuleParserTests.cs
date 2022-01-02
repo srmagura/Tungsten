@@ -126,6 +126,7 @@ fun main(): void {
             {
                 new VariableDeclarationAndAssignmentStatementAstNode(
                     "a",
+                    Type: "string",
                     Const: true,
                     new StringAstNode("apple")
                 ),
@@ -164,6 +165,7 @@ fun main(): void {
             {
                 new VariableDeclarationAndAssignmentStatementAstNode(
                     "my_variable",
+                    Type: "int",
                     Const: false,
                     new IntAstNode(7)
                 ),

@@ -6,55 +6,65 @@ namespace Tungsten.Compiler.Emit;
 
 internal static class StatementEmitter
 {
-    internal static void Emit(AstNode ast, ModuleDefinition module, TypeDefinition @class, ILProcessor il)
+    internal static void Emit(AstNode ast, FunctionContext context)
     {
         switch (ast)
         {
             case FunctionCallStatementAstNode functionCall:
-                Emit(functionCall, module, @class, il);
+                Emit(functionCall, context);
                 break;
             case VariableDeclarationAndAssignmentStatementAstNode variableDeclarationAndAssignment:
-                Emit(variableDeclarationAndAssignment, module, @class, il);
+                Emit(variableDeclarationAndAssignment, context);
+                break;
+            case AssignmentStatementAstNode assignment:
+                Emit(assignment, context);
                 break;
             default:
                 throw new Exception($"Unsupported statement: {ast.GetType().Name}.");
         }
     }
 
-    private static void Emit(
-        FunctionCallStatementAstNode ast,
-        ModuleDefinition module,
-        TypeDefinition @class,
-        ILProcessor il
-    )
+    private static void Emit(FunctionCallStatementAstNode ast, FunctionContext context)
     {
         var functionCall = ast.FunctionCall;
 
         if (functionCall.Function == "print")
         {
-            EmitPrint(functionCall.Arguments, module, il);
+            EmitPrint(functionCall.Arguments, context);
             return;
         }
 
-        var method = @class.Methods.FirstOrDefault(m => m.Name == functionCall.Function);
+        var method = context.ModuleContext.Class.Methods
+            .FirstOrDefault(m => m.Name == functionCall.Function);
 
         if (method != null)
         {
             // TODO support arguments
-            il.Emit(OpCodes.Call, method);
+            context.IL.Emit(OpCodes.Call, method);
             return;
         }
 
         throw new Exception($"Function not found: {functionCall.Function}.");
-
     }
 
-    private static void EmitPrint(AstNode[] arguments, ModuleDefinition module, ILProcessor il)
+    private static Type GetTypeFromString(string type, ModuleDefinition module)
+    {
+        return type switch
+        {
+            "string" => typeof(string),
+            "int" => typeof(long),
+            _ => throw new Exception($"Unsupported type: {type}.")
+        };
+    }
+
+    private static void EmitPrint(AstNode[] arguments, FunctionContext context)
     {
         if (arguments.Length != 1)
             throw new Exception("print expected exactly one argument.");
 
         var argument = arguments[0];
+        var module = context.ModuleContext.AssemblyContext.Module;
+        var il = context.IL;
 
         switch (argument)
         {
@@ -82,8 +92,11 @@ internal static class StatementEmitter
                 {
                     il.Emit(OpCodes.Ldloc_0);
 
+                    var variable = context.Scope.GetOrThrow(variableArgument.Identifier);
+                    var variableType = GetTypeFromString(variable.Type, context.ModuleContext.AssemblyContext.Module);
+
                     var writeLine = module.ImportReference(
-                        typeof(Console).GetMethod(nameof(Console.WriteLine), new[] { typeof(string) })
+                        typeof(Console).GetMethod(nameof(Console.WriteLine), new[] { variableType })
                     );
                     il.Emit(OpCodes.Call, writeLine);
                     break;
@@ -95,18 +108,32 @@ internal static class StatementEmitter
 
     private static void Emit(
         VariableDeclarationAndAssignmentStatementAstNode ast,
-        ModuleDefinition module,
-        TypeDefinition @class,
-        ILProcessor il
+        FunctionContext context
     )
     {
-        if (ast.Value is not StringAstNode stringAstNode)
-            throw new Exception("Only string is supported right now.");
+        var module = context.ModuleContext.AssemblyContext.Module;
+        var variableType = GetTypeFromString(ast.Type, module);
+        var variableTypeReference = module.ImportReference(variableType);
 
-        var @string = module.ImportReference(typeof(string));
-        il.Body.Variables.Add(new VariableDefinition(@string));
+        context.IL.Body.Variables.Add(new VariableDefinition(variableTypeReference));
+        context.Scope.Variables[ast.Identifier] = new Variable(ast.Identifier, ast.Type);
 
-        il.Emit(OpCodes.Ldstr, stringAstNode.Value);
-        il.Emit(OpCodes.Stloc_0);
+        ExpressionEmitter.Emit(ast.Value, context);
+
+        // TODO 0 is hardcoded
+        context.IL.Emit(OpCodes.Stloc_0);
+    }
+
+    private static void Emit(
+        AssignmentStatementAstNode ast,
+        FunctionContext context
+    )
+    {
+        var variable = context.Scope.GetOrThrow(ast.Identifier);
+
+        ExpressionEmitter.Emit(ast.Value, context);
+
+        // TODO 0 is hardcoded
+        context.IL.Emit(OpCodes.Stloc_0);
     }
 }

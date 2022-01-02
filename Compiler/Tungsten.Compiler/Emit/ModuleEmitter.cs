@@ -8,22 +8,22 @@ internal static class ModuleEmitter
 {
     internal static (TypeDefinition Class, MethodDefinition? EntryPoint) Emit(
         ModuleAstNode ast,
-        ModuleDefinition module,
-        string rootNamespace
+        AssemblyContext context
     )
     {
         var @class = new TypeDefinition(
-            rootNamespace,
+            context.RootNamespace,
             ast.Name,
             TypeAttributes.Class | TypeAttributes.Public | TypeAttributes.Abstract | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit,
-            module.ImportReference(typeof(Object))
+            context.Module.ImportReference(typeof(Object))
         );
 
+        var moduleContext = new ModuleContext(context, @class);
         MethodDefinition? mainMethod = null;
 
         foreach (var functionDeclaration in ast.FunctionDeclarations)
         {
-            var method = Emit(functionDeclaration, module, @class);
+            var method = Emit(functionDeclaration, moduleContext);
             @class.Methods.Add(method);
 
             if (functionDeclaration.IsMain)
@@ -33,19 +33,20 @@ internal static class ModuleEmitter
         return (@class, mainMethod);
     }
 
-    private static MethodDefinition Emit(FunctionDeclarationAstNode ast, ModuleDefinition module, TypeDefinition @class)
+    private static MethodDefinition Emit(FunctionDeclarationAstNode ast, ModuleContext context)
     {
         var method = new MethodDefinition(
             ast.Name,
             MethodAttributes.Static | MethodAttributes.Assembly | MethodAttributes.HideBySig,
-            module.ImportReference(typeof(void))
+            context.AssemblyContext.Module.ImportReference(typeof(void))
         );
 
         var il = method.Body.GetILProcessor();
+        var functionContext = new FunctionContext(context, new Scope(), il);
 
         foreach (var statement in ast.Statements)
         {
-            StatementEmitter.Emit(statement, module, @class, il);
+            StatementEmitter.Emit(statement, functionContext);
         }
 
         il.Emit(OpCodes.Ret);
