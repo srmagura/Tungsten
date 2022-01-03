@@ -1,11 +1,10 @@
-using Tungsten.Compiler.AST;
 using Tungsten.Compiler.Parser;
 using Tungsten.Compiler.Parser.Module;
 
-namespace Tungsten.Compiler.Tests.Parser;
+namespace Tungsten.Compiler.Tests.CodeToAst;
 
 [TestClass]
-public class ModuleParserTests : ParserTest
+public class ModuleCodeToAstTests : CodeToAstTest
 {
     private const string ModuleName = "TestModule";
 
@@ -20,7 +19,7 @@ public class ModuleParserTests : ParserTest
         TestParseCore(ModuleParser.ParseModule, ConvertToAst, code, expected);
     }
 
-    private static FunctionCallStatementAstNode Print(AstNode argument)
+    private static FunctionCallStatementAstNode Print(ExpressionAstNode argument)
     {
         return new FunctionCallStatementAstNode(
             new FunctionCallAstNode(
@@ -40,13 +39,13 @@ fun main(): void {
         ";
 
         var main = new FunctionDeclarationAstNode(
-                "main",
-                IsMain: true,
-                new[]
-                {
+            "main",
+            IsMain: true,
+            new[]
+            {
                 Print(new StringAstNode("hello world"))
-                }
-            );
+            }
+        );
 
         var expected = new ModuleAstNode(
             ModuleName,
@@ -90,7 +89,7 @@ fun main(): void {
                 new FunctionCallStatementAstNode(
                     new FunctionCallAstNode(
                         "print3",
-                        Array.Empty<AstNode>()
+                        Array.Empty<ExpressionAstNode>()
                     )
                 ),
                 Print(new StringAstNode(".14159"))
@@ -126,7 +125,7 @@ fun main(): void {
             {
                 new VariableDeclarationAndAssignmentStatementAstNode(
                     "a",
-                    Type: "string",
+                    Type: WType.String,
                     Const: true,
                     new StringAstNode("apple")
                 ),
@@ -165,7 +164,7 @@ fun main(): void {
             {
                 new VariableDeclarationAndAssignmentStatementAstNode(
                     "my_variable",
-                    Type: "int",
+                    Type: WType.Int,
                     Const: false,
                     new IntAstNode(7)
                 ),

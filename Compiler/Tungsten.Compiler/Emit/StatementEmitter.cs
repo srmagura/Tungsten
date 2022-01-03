@@ -47,31 +47,17 @@ internal static class StatementEmitter
         throw new Exception($"Function not found: {functionCall.Function}.");
     }
 
-    private static Type GetTypeFromString(string type, ModuleDefinition module)
+    private static Type GetTypeFromWType(WType wType)
     {
-        return type switch
+        return wType switch
         {
-            "string" => typeof(string),
-            "int" => typeof(long),
-            _ => throw new Exception($"Unsupported type: {type}.")
+            WType.String => typeof(string),
+            WType.Int => typeof(long),
+            _ => throw new Exception($"Unsupported type: {wType}.")
         };
     }
 
-    private static Type GetExpressionType(AstNode ast, FunctionContext context)
-    {
-        var typeString = ast switch
-        {
-            StringAstNode => "string",
-            IntAstNode => "int",
-            VariableReferenceAstNode variableReference =>
-                context.Scope.GetOrThrow(variableReference.Identifier).Type,
-            _ => throw new Exception($"Unsupported: {ast.GetType().Name}.")
-        };
-
-        return GetTypeFromString(typeString, context.ModuleContext.AssemblyContext.Module);
-    }
-
-    private static void EmitPrint(AstNode[] arguments, FunctionContext context)
+    private static void EmitPrint(ExpressionAstNode[] arguments, FunctionContext context)
     {
         if (arguments.Length != 1)
             throw new Exception("print expected exactly one argument.");
@@ -82,8 +68,10 @@ internal static class StatementEmitter
 
         ExpressionEmitter.Emit(argument, context);
 
-        var argumentType = GetExpressionType(argument, context);
+        if (argument.Type == null)
+            throw new Exception("argument.Type is null.");
 
+        var argumentType = GetTypeFromWType(argument.Type.Value);
         var writeLine = module.ImportReference(
             typeof(Console).GetMethod(nameof(Console.WriteLine), new[] { argumentType })
         );
@@ -98,7 +86,7 @@ internal static class StatementEmitter
         ExpressionEmitter.Emit(ast.Value, context);
 
         var module = context.ModuleContext.AssemblyContext.Module;
-        var variableType = GetTypeFromString(ast.Type, module);
+        var variableType = GetTypeFromWType(ast.Type);
         var variableTypeReference = module.ImportReference(variableType);
 
         context.IL.Body.Variables.Add(new VariableDefinition(variableTypeReference));

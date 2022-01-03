@@ -32,7 +32,7 @@ internal static class StatementToAst
     {
         return new VariableDeclarationAndAssignmentStatementAstNode(
             parseNode.Declaration.Identifier,
-            parseNode.Declaration.TypeAnnotation.TheType,
+            parseNode.Declaration.TypeAnnotation.Type,
             parseNode.Declaration.Const,
             ExpressionToAst.Convert(parseNode.Value)
         );

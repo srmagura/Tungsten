@@ -1,55 +1,65 @@
 namespace Tungsten.Compiler.AST;
 
-public abstract record AstNode();
+internal abstract record AstNode();
+
+internal abstract record ExpressionAstNode : AstNode
+{
+    protected ExpressionAstNode(WType? type)
+    {
+        Type = type;
+    }
+
+    internal WType? Type { get; set; }
+}
 
 // Literals
 
-public record BoolAstNode(bool Value)
-    : AstNode();
+internal record BoolAstNode(bool Value)
+    : ExpressionAstNode(WType.Bool);
 
-public record IntAstNode(long Value)
-    : AstNode();
+internal record IntAstNode(long Value)
+    : ExpressionAstNode(WType.Int);
 
-public record StringAstNode(string Value)
-    : AstNode();
+internal record StringAstNode(string Value)
+    : ExpressionAstNode(WType.String);
 
 // Expressions
 
-public record VariableReferenceAstNode(string Identifier)
-    : AstNode();
+internal record VariableReferenceAstNode(string Identifier)
+    : ExpressionAstNode(type: null);
 
-public record FunctionCallAstNode(string Function, AstNode[] Arguments)
-    : AstNode();
+internal record FunctionCallAstNode(string Function, ExpressionAstNode[] Arguments)
+    : ExpressionAstNode(WType.Void); // TODO
 
-public record UnaryOperationAstNode(UnaryOperator Operator, AstNode Operand)
-    : AstNode();
+internal record UnaryOperationAstNode(UnaryOperator Operator, ExpressionAstNode Operand)
+    : ExpressionAstNode(type: null);
 
-public record BinaryOperationAstNode(BinaryOperator Operator, AstNode Operand0, AstNode Operand1)
-    : AstNode();
+internal record BinaryOperationAstNode(BinaryOperator Operator, ExpressionAstNode Operand0, ExpressionAstNode Operand1)
+    : ExpressionAstNode(type: null);
 
 // Statements
 
-public record VariableDeclarationStatementAstNode(string Identifier)
+internal record VariableDeclarationStatementAstNode(string Identifier)
     : AstNode();
 
-public record VariableDeclarationAndAssignmentStatementAstNode(string Identifier, string Type, bool Const, AstNode Value)
+internal record VariableDeclarationAndAssignmentStatementAstNode(string Identifier, WType Type, bool Const, ExpressionAstNode Value)
     : AstNode();
 
-public record AssignmentStatementAstNode(string Identifier, AstNode Value)
+internal record AssignmentStatementAstNode(string Identifier, ExpressionAstNode Value)
     : AstNode();
 
-public record FunctionCallStatementAstNode(FunctionCallAstNode FunctionCall)
+internal record FunctionCallStatementAstNode(FunctionCallAstNode FunctionCall)
     : AstNode();
 
 // Module-level
 
-public record FunctionDeclarationAstNode(string Name, bool IsMain, AstNode[] Statements)
+internal record FunctionDeclarationAstNode(string Name, bool IsMain, AstNode[] Statements)
     : AstNode();
 
 // Top-level
 
-public record ModuleAstNode(string Name, FunctionDeclarationAstNode[] FunctionDeclarations)
+internal record ModuleAstNode(string Name, FunctionDeclarationAstNode[] FunctionDeclarations)
     : AstNode();
 
-public record AssemblyAstNode(string Name, ModuleAstNode Module)
+internal record AssemblyAstNode(string Name, ModuleAstNode Module)
     : AstNode();

@@ -2,6 +2,7 @@ using Tungsten.Compiler.AST;
 using Tungsten.Compiler.Emit;
 using Tungsten.Compiler.Lexer;
 using Tungsten.Compiler.Parser.Module;
+using Tungsten.Compiler.TypeCheck;
 
 namespace Tungsten.Compiler;
 
@@ -13,6 +14,7 @@ public static class TungstenCompiler
         var parseTree = ModuleParser.Parse(tokens);
         var moduleAst = ModuleToAst.Convert(parseTree, moduleName);
         var ast = new AssemblyAstNode(projectName, moduleAst);
+        TypeChecker.TypeCheck(ast);
 
         ProjectEmitter.Emit(ast, outputDirectory);
     }

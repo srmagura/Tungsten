@@ -1,9 +1,9 @@
 using Tungsten.Compiler.Parser.Expression;
 
-namespace Tungsten.Compiler.Tests.Parser.Expression;
+namespace Tungsten.Compiler.Tests.CodeToAst.Expression;
 
 [TestClass]
-public class AdditionParserTests : ParserTest
+public class AdditionCodeToAstTests : CodeToAstTest
 {
     private static void TestParse(string code, AstNode expected)
     {

@@ -27,6 +27,13 @@ internal static class ExpressionEmitter
                     il.Emit(OpCodes.Ldloc, variable.Index);
                     break;
                 }
+            case BinaryOperationAstNode binaryOperation:
+                {
+                    Emit(binaryOperation.Operand0, context);
+                    Emit(binaryOperation.Operand1, context);
+                    il.Emit(OpCodes.Add);
+                    break;
+                }
             default:
                 throw new Exception($"Expression type not supported: {ast.GetType().Name}.");
         }

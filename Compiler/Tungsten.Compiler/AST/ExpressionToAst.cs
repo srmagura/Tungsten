@@ -4,7 +4,7 @@ namespace Tungsten.Compiler.AST;
 
 internal static class ExpressionToAst
 {
-    internal static AstNode Convert(ParseNode parseNode)
+    internal static ExpressionAstNode Convert(ParseNode parseNode)
     {
         return parseNode switch
         {
@@ -30,7 +30,7 @@ internal static class ExpressionToAst
         return new FunctionCallAstNode(parseNode.Function, arguments);
     }
 
-    private static AstNode ConvertBinaryOperation(BinaryOperationParseNode parseNode)
+    private static ExpressionAstNode ConvertBinaryOperation(BinaryOperationParseNode parseNode)
     {
         var operand0 = Convert(parseNode.Operand);
 
@@ -49,7 +49,7 @@ internal static class ExpressionToAst
         }
     }
 
-    private static AstNode ConvertPostBinaryOperation(PostBinaryOperationParseNode parseNode, AstNode operand0)
+    private static ExpressionAstNode ConvertPostBinaryOperation(PostBinaryOperationParseNode parseNode, ExpressionAstNode operand0)
     {
         var operand1 = Convert(parseNode.Operand);
         var binaryOperation = new BinaryOperationAstNode(parseNode.Operator, operand0, operand1);

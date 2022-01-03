@@ -1,10 +1,9 @@
-using Tungsten.Compiler.AST;
 using Tungsten.Compiler.Parser.Module;
 
-namespace Tungsten.Compiler.Tests.Parser;
+namespace Tungsten.Compiler.Tests.CodeToAst;
 
 [TestClass]
-public class StatementParserTests : ParserTest
+public class StatementCodeToAstTests : CodeToAstTest
 {
     private static void TestParse(string code, AstNode expected)
     {
@@ -17,7 +16,7 @@ public class StatementParserTests : ParserTest
         var expected = new FunctionCallStatementAstNode(
             new FunctionCallAstNode(
                 "f",
-                Array.Empty<AstNode>()
+                Array.Empty<ExpressionAstNode>()
             )
         );
 
@@ -69,7 +68,7 @@ public class StatementParserTests : ParserTest
     {
         var expected = new VariableDeclarationAndAssignmentStatementAstNode(
             "a",
-            Type: "string",
+            Type: WType.String,
             Const: true,
             new StringAstNode("apple")
         );
@@ -82,7 +81,7 @@ public class StatementParserTests : ParserTest
     {
         var expected = new VariableDeclarationAndAssignmentStatementAstNode(
             "my_variable",
-            Type: "int",
+            Type: WType.Int,
             Const: false,
             new IntAstNode(7)
         );

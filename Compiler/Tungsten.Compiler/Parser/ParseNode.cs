@@ -58,7 +58,7 @@ internal record FunctionCallParseNode(string Function, ArgumentListParseNode Arg
 
 // Type annotations
 
-internal record TypeParseNode(string TheType)
+internal record TypeParseNode(WType Type)
     : ParseNode();
 
 // Statement parts

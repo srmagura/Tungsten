@@ -40,4 +40,11 @@ public class TheE2eTests : E2eTest
         var output = await BuildAndRunAsync(nameof(MultipleVariables));
         Assert.AreEqual("99\napple", output);
     }
+
+    [TestMethod]
+    public async Task Math()
+    {
+        var output = await BuildAndRunAsync(nameof(Math));
+        Assert.AreEqual("4", output);
+    }
 }

@@ -1,6 +1,6 @@
 namespace Tungsten.Compiler.Emit;
 
-internal record Variable(string Identifier, string Type, ushort Index);
+internal record Variable(string Identifier, WType Type, ushort Index);
 
 internal class Scope
 {
@@ -8,7 +8,7 @@ internal class Scope
 
     private ushort Index = 0;
 
-    internal ushort Define(string identifier, string type)
+    internal ushort Define(string identifier, WType type)
     {
         Variables[identifier] = new Variable(identifier, type, Index);
         return Index++;

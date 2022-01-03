@@ -1,10 +1,11 @@
 using Tungsten.Compiler.AST;
 using Tungsten.Compiler.Parser.Expression;
+using Tungsten.Compiler.Tests.CodeToAst;
 
-namespace Tungsten.Compiler.Tests.Parser.Expression;
+namespace Tungsten.Compiler.Tests.CodeToAst.Expression;
 
 [TestClass]
-public class MultiplicationParserTests : ParserTest
+public class MultiplicationCodeToAstTests : CodeToAstTest
 {
     private static void TestParse(string code, AstNode expected)
     {

@@ -1,5 +1,4 @@
 using Tungsten.Compiler.Lexer;
-using Tungsten.Compiler.Parser;
 
 namespace Tungsten.Compiler.Parser.Module;
 
@@ -13,12 +12,12 @@ internal static class TypeParser
         {
             case TokenType.IntKeyword:
                 return new ParseResult<TypeParseNode>(
-                    new TypeParseNode("int"),
+                    new TypeParseNode(WType.Int),
                     1
                 );
             case TokenType.StringKeyword:
                 return new ParseResult<TypeParseNode>(
-                    new TypeParseNode("string"),
+                    new TypeParseNode(WType.String),
                     1
                 );
         }
